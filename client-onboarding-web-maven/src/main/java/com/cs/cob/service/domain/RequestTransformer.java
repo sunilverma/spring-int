@@ -15,7 +15,7 @@ public String transInput(COBRequest cobRequest)
 
 public String transOutput(COBRequest cobRequest)
 {
-	System.out.println("Output trasn >> " + cobRequest.getAppName());
+	System.out.println("XXXOutput trasn >> " + cobRequest.getAppName());
 	return (cobRequest.getAppName().toUpperCase());
 }
 
