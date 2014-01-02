@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+	http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-3.0.xsd 
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+	http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="com.cs.cob" />
+	<!-- intercept and log every message -->
+	<int:logging-channel-adapter id="logger"
+		level="DEBUG" />
+	<int:wire-tap channel="logger" />
+
+	<!-- <int:gateway id="sampleServiceRESTGateway"
+		service-interface="com.cs.cob.service.rest.AppSetup"
+		default-request-channel="appSetupRESTChannel">
+		<int:method name="setupApplication" request-channel="appSetupRESTChannel"/>
+	</int:gateway> -->
+	
+	<int:inbound-channel-adapter id="sampleServiceRESTGateway"
+		ref="sampleService"
+		method="setupApplication"
+		channel="appSetupRESTChannel">
+	</int:inbound-channel-adapter> 
+
+	<int:channel id="appSetupRESTChannel" />
+
+	<!-- <task:scheduler id="taskScheduler" pool-size="10"/> -->
+
+	<int:chain input-channel="appSetupRESTChannel" output-channel="outboundJmsRequests">
+		<int:transformer ref="requestTransformer" method="transInput" />
+		<int:service-activator ref="sampleService"
+			method="setupApplication" />
+		<int:transformer ref="requestTransformer" method="transOutput" />
+	</int:chain>
+
+	
+
+	<int:channel id="outboundJmsRequests"/>
+	
+	<int-jms:outbound-channel-adapter id="messageToCafeApp" destination="requestQueue" channel="channel1">
+		<!-- <int-jms:reply-listener /> -->
+	</int-jms:outbound-channel-adapter>
+	
+	<int:object-to-json-transformer input-channel="outboundJmsRequests" output-channel="channel1"/>
+
+	<int:channel id="channel1"></int:channel>
+</beans>
