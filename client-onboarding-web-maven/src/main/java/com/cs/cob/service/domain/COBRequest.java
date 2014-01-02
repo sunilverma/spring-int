@@ -7,7 +7,7 @@ public class COBRequest implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 100L;
 	private String appName;
 
 	public COBRequest(){}
