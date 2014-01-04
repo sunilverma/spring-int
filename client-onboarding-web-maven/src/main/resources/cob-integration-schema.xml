@@ -16,18 +16,18 @@
 		level="DEBUG" />
 	<int:wire-tap channel="logger" />
 
-	<!-- <int:gateway id="sampleServiceRESTGateway"
+	<int:gateway id="sampleServiceRESTGateway"
 		service-interface="com.cs.cob.service.rest.AppSetup"
 		default-request-channel="appSetupRESTChannel">
 		<int:method name="setupApplication" request-channel="appSetupRESTChannel"/>
-	</int:gateway> -->
+	</int:gateway>
 	
-	<int:inbound-channel-adapter id="sampleServiceRESTGateway"
+	<!-- <int:inbound-channel-adapter id="sampleServiceRESTGateway"
 		ref="sampleService"
 		method="setupApplication"
 		channel="appSetupRESTChannel">
 	</int:inbound-channel-adapter> 
-
+ -->
 	<int:channel id="appSetupRESTChannel" />
 
 	<!-- <task:scheduler id="taskScheduler" pool-size="10"/> -->
