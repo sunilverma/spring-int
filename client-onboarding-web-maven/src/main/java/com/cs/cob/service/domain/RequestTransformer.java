@@ -1,5 +1,8 @@
 package com.cs.cob.service.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 
@@ -13,10 +16,14 @@ public String transInput(COBRequest cobRequest)
 }
 
 
-public String transOutput(COBRequest cobRequest)
+public COBResponse transOutput(COBRequest cobRequest)
 {
 	System.out.println("XXXOutput trasn >> " + cobRequest.getAppName());
-	return (cobRequest.getAppName().toUpperCase());
+	List<String> userList = new ArrayList<String>();
+	userList.add("Sunil");
+	userList.add("Anil");
+	COBResponse response = new COBResponse(cobRequest.getAppName(),"CRITICAL",userList);
+	return response;
 }
 
 
