@@ -10,6 +10,7 @@
 		<param-value> 
 			classpath:/cob-integration-schema.xml
 			classpath:/common.xml
+			classpath:/mail.xml
 			classpath:/cxf-config.xml </param-value>
 	</context-param>
 

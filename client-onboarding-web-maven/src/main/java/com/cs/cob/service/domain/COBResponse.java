@@ -4,6 +4,9 @@ import java.util.List;
 
 public class COBResponse {
 
+	public COBResponse() {
+		super();
+	}
 	String appName;
 	String appType;
 	String appOwner;

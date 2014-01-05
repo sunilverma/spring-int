@@ -4,11 +4,22 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:task="http://www.springframework.org/schema/task"
 	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-mongodb="http://www.springframework.org/schema/integration/mongodb"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 	xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
-	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.1.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
 	http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-3.0.xsd 
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
-	http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context.xsd">
+	http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/integration/mongodb http://www.springframework.org/schema/integration/mongodb/spring-integration-mongodb-3.0.xsd">
+
+	<mongo:db-factory id="mongoDbFactory" dbname="test" />
+
+
+
+
+
 
 	<context:component-scan base-package="com.cs.cob" />
 	<!-- intercept and log every message -->
@@ -19,35 +30,50 @@
 	<int:gateway id="sampleServiceRESTGateway"
 		service-interface="com.cs.cob.service.rest.AppSetup"
 		default-request-channel="appSetupRESTChannel">
-		<int:method name="setupApplication" request-channel="appSetupRESTChannel"/>
+		<int:method name="setupApplication" request-channel="appSetupRESTChannel" />
 	</int:gateway>
-	
-	<!-- <int:inbound-channel-adapter id="sampleServiceRESTGateway"
-		ref="sampleService"
-		method="setupApplication"
-		channel="appSetupRESTChannel">
-	</int:inbound-channel-adapter> 
- -->
+
 	<int:channel id="appSetupRESTChannel" />
 
 	<!-- <task:scheduler id="taskScheduler" pool-size="10"/> -->
 
-	<int:chain input-channel="appSetupRESTChannel" output-channel="outboundJmsRequests">
+	<int:chain input-channel="appSetupRESTChannel"
+		output-channel="outboundJmsRequests">
 		<int:transformer ref="requestTransformer" method="transInput" />
 		<int:service-activator ref="sampleService"
 			method="setupApplication" />
 		<int:transformer ref="requestTransformer" method="transOutput" />
 	</int:chain>
 
-	
 
-	<int:channel id="outboundJmsRequests"/>
-	
-	<int-jms:outbound-channel-adapter id="messageToCafeApp" destination="requestQueue" channel="channel1">
+
+	<int:channel id="outboundJmsRequests" />
+
+	<int-jms:outbound-channel-adapter id="messageToCafeApp"
+		destination="requestQueue" channel="channel3">
 		<!-- <int-jms:reply-listener /> -->
 	</int-jms:outbound-channel-adapter>
-	
-	<int:object-to-json-transformer input-channel="outboundJmsRequests" output-channel="channel1"/>
+
+	<int:object-to-json-transformer
+		input-channel="channel4" output-channel="channel1" />
 
 	<int:channel id="channel1"></int:channel>
+
+	<int-mongodb:outbound-channel-adapter
+		id="deafultAdapter" channel="channel2" />
+	<!-- <int:outbound-channel-adapter channel="channel1"></int:outbound-channel-adapter> -->
+
+	<int:recipient-list-router id="simpleRouter"
+		input-channel="channel1">
+
+		<int:recipient channel="channel2" />
+		<int:recipient channel="channel3" />
+
+	</int:recipient-list-router>
+	<int:channel id="channel2"></int:channel>
+	<int:channel id="channel3"></int:channel>
+	<int:service-activator input-channel="outboundJmsRequests" output-channel="channel4" ref="jmsService" method="doSomething"></int:service-activator>
+	<int:channel id="channel4"></int:channel>
+	
+	
 </beans>

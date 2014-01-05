@@ -12,4 +12,10 @@ public class JMSService {
 		response.setAppOwner("Sunil Verma");
 		return response;
 	}
+	
+	public COBResponse doSomethingMore(COBResponse response)
+	{
+		System.out.println("------------------------------------------- " + response.getAppOwner());
+		return response;
+	}
 }

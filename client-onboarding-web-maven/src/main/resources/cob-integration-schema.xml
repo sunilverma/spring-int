@@ -74,4 +74,6 @@
 	<int:channel id="channel3"></int:channel>
 	<int:service-activator input-channel="outboundJmsRequests" output-channel="channel4" ref="jmsService" method="doSomething"></int:service-activator>
 	<int:channel id="channel4"></int:channel>
+	
+	
 </beans>
