@@ -12,5 +12,4 @@ public class JMSService {
 		response.setAppOwner("Sunil Verma");
 		return response;
 	}
-
 }
