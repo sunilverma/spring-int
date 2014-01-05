@@ -6,6 +6,13 @@ public class COBResponse {
 
 	String appName;
 	String appType;
+	String appOwner;
+	public String getAppOwner() {
+		return appOwner;
+	}
+	public void setAppOwner(String appOwner) {
+		this.appOwner = appOwner;
+	}
 	List<String>users;
 	public String getAppName() {
 		return appName;
