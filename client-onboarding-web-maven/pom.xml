@@ -13,9 +13,31 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>0.5.0.BUILD-SNAPSHOT</version>
 	</parent>
+	<properties>
+		<sirona.version>0.1-incubating</sirona.version>
+	</properties>
 
 	<!-- Add typical dependencies for a web application -->
 	<dependencies>
+
+
+		<dependency>
+			<groupId>org.apache.sirona</groupId>
+			<artifactId>sirona-core</artifactId>
+			<version>${sirona.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.sirona</groupId>
+			<artifactId>sirona-reporting</artifactId>
+			<version>${sirona.version}</version>
+			<classifier>classes</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.sirona</groupId>
+			<artifactId>sirona-web</artifactId>
+			<version>${sirona.version}</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -29,6 +51,17 @@
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-http</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-jmx</artifactId>
+			<version>3.0.0.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.bull.javamelody</groupId>
+			<artifactId>javamelody-core</artifactId>
+			<version>1.48.0</version>
 		</dependency>
 
 		<dependency>
@@ -70,8 +103,21 @@
 		</dependency>
 
 	</dependencies>
+		
+	
+	
 	<build>
 		<finalName>client-onboarding-web-maven</finalName>
+		<plugins>
+        <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.1</version>
+            <configuration>
+                <fork>true</fork>
+                <executable>C:\Program Files\Java\jdk1.7.0_45\bin\javac.exe</executable>
+            </configuration>
+        </plugin>
+    </plugins>
 	</build>
 
 	<!-- Allow access to Spring milestones and snapshots -->
@@ -92,6 +138,7 @@
 			</snapshots>
 		</repository>
 	</repositories>
+	
 	<pluginRepositories>
 		<pluginRepository>
 			<id>spring-snapshots</id>

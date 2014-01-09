@@ -15,6 +15,10 @@ public class COBRequest implements Serializable{
 		this.appName=appName;
 	}
 
+	@Override
+	public String toString() {
+		return ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> COBRequest [appName=" + appName + "] >>>>>>>>>>>>>";
+	}
 	public String getAppName() {
 		return appName;
 	}
