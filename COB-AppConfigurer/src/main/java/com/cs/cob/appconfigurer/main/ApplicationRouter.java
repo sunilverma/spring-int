@@ -3,7 +3,7 @@ package com.cs.cob.appconfigurer.main;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Router;
 
-import com.cs.cob.appconfigurer.Application;
+import com.cs.cob.common.Application;
 
 @MessageEndpoint
 public class ApplicationRouter {

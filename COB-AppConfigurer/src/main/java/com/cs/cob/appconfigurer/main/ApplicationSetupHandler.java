@@ -1,7 +1,7 @@
 package com.cs.cob.appconfigurer.main;
 
 import com.cs.cob.appconfigurer.AppConfirmation;
-import com.cs.cob.appconfigurer.Application;
+import com.cs.cob.common.Application;
 
 public class ApplicationSetupHandler {
 

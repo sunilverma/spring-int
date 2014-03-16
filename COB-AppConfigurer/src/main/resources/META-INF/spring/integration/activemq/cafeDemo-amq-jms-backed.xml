@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
 	xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
 	xmlns:amq="http://activemq.apache.org/schema/core"
@@ -11,18 +12,6 @@
 		http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd
 		http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core-5.4.2.xsd">
 
-	<!-- Set up a live broker with a transport connector at port 61616 (default 
-		amq port) We imported the ActiveMQ schema so we can use the schema support. 
-		When this application shuts down, so does the broker. You can omit the embedded 
-		declaration here and set up the broker stand alone and use the standard ActiveMQ 
-		HighAvailability mechanism. You can also use the peer:// scheme to link up 
-		multiple embedded brokers. See the docs for more: http://activemq.apache.org/peer-transport-reference.html -->
-	<!-- <amq:broker brokerName="cafe-broker">
-		<amq:transportConnectors>
-			<amq:transportConnector name="openwire"
-				uri="tcp://localhost:61616" />
-		</amq:transportConnectors>
-	</amq:broker> -->
 	
 		<bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
 		<property name="targetConnectionFactory">
@@ -77,36 +66,37 @@
 		
 	<int-jms:channel id="pbs"
 		queue-name="pbs"
-		message-driven="false" />
-	<int:service-activator input-channel="pbs"
-		ref="setupHandler" method="setUpCompleted" output-channel="completedAppSetupRequest" />
+		message-driven="false" >
+		
+		<int-jms:interceptors>
+    	  <int:wire-tap channel="logger"/>
+   		 </int-jms:interceptors>
+   		 
+		</int-jms:channel>
+		
+			<int:logging-channel-adapter log-full-message="true" id="logger" level="INFO"/>
+		
+	
 
-	<!-- individual order items are processed by the barista -->
-	<!-- Note, these channels were defined as "pollable" in the original SI 
-		config files. To achieve the same thing with a JMS-backed channel, set the 
-		"message-driven" property to "false" -->
+	
 	<int-jms:channel id="eps"
 		queue-name="eps"
 		message-driven="false" />
-	<int:service-activator input-channel="eps"
-		ref="setupHandler" method="setUpCompleted" output-channel="completedAppSetupRequest" />
+		
+	
 
 	<!-- drink order items are aggregated in a call to the waiter -->
-	<int-jms:channel id="completedAppSetupRequest"
-		queue-name="org.springframework.integration.samples.cafe.drinks.prepared" />
-	<int-jms:channel id="deliveriesChannel"
-		queue-name="org.springframework.integration.samples.cafe.deliveres" />
-	<int:aggregator input-channel="completedAppSetupRequest" method="prepareDelivery"
-		output-channel="deliveriesChannel">
-		<bean class="com.cs.cob.appconfigurer.main.Waiter" />
-	</int:aggregator>
+	
+	
+		
+	
 
-	<int-stream:stdout-channel-adapter
-		id="deliveries" channel="deliveriesChannel" />
+	
 
 	<bean id="setupHandler"
 		class="com.cs.cob.appconfigurer.main.ApplicationSetupHandler" />
 
 	<int:poller id="poller" default="true" fixed-delay="1000" />
 
+	
 </beans>

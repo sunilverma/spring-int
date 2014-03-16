@@ -43,8 +43,8 @@ public class CafeDemoAppActiveMQ {
 		ApplicationConfigurer cafe = (ApplicationConfigurer) context.getBean("cafe");
 		for (int i = 1; i <= 2; i++) {
 			AppSetupRequest order = new AppSetupRequest(i);
-			order.addItem(DrinkType.LATTE, 2, false);
-			order.addItem(DrinkType.MOCHA, 3, true);
+		//	order.addItem(DrinkType.LATTE, 2, false);
+		//	order.addItem(DrinkType.MOCHA, 3, true);
 			cafe.placeOrder(order);
 		}
 	}

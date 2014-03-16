@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cs.cob.common.Application;
+
 /**
  * @author Mark Fisher
  * @author Marius Bogoevici
@@ -42,9 +44,9 @@ public class AppSetupRequest implements Serializable{
 		this.number = number;
 	}
 
-	public void addItem(DrinkType drinkType, int shots, boolean iced) {
+	/*public void addItem(DrinkType drinkType, int shots, boolean iced) {
 		this.applicationList.add(new Application(this.number, drinkType, shots, iced));
-	}
+	}*/
 
 	public void addItem(String appName) {
 		this.applicationList.add(new Application(this.number, appName));

@@ -19,7 +19,6 @@ package com.cs.cob.appconfigurer.main;
 import java.util.List;
 
 import com.cs.cob.appconfigurer.AppConfirmation;
-import com.cs.cob.appconfigurer.Application;
 import com.cs.cob.appconfigurer.Delivery;
 import com.cs.cob.appconfigurer.Drink;
 

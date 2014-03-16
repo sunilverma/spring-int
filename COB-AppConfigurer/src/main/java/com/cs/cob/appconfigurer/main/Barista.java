@@ -18,10 +18,8 @@ package com.cs.cob.appconfigurer.main;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.log4j.Logger;
-
 import com.cs.cob.appconfigurer.Drink;
-import com.cs.cob.appconfigurer.Application;
+import com.cs.cob.common.Application;
 
 /**
  * @author Mark Fisher
@@ -30,7 +28,6 @@ import com.cs.cob.appconfigurer.Application;
  */
 
 public class Barista {
-	private static Logger logger = Logger.getLogger(Barista.class);
 	private long hotDrinkDelay = 5000;
 
 	private long coldDrinkDelay = 1000;
@@ -49,7 +46,7 @@ public class Barista {
 	}
 
 	public Drink prepareHotDrink(Application orderItem) {
-		try {
+		/*try {
 			Thread.sleep(this.hotDrinkDelay);
 			logger.info(Thread.currentThread().getName()
 					+ " prepared hot drink #" + hotDrinkCounter.incrementAndGet() + " for order #"
@@ -60,10 +57,12 @@ public class Barista {
 			Thread.currentThread().interrupt();
 			return null;
 		}
+		*/
+		return null;
 	}
 
 	public Drink prepareColdDrink(Application orderItem) {
-		try {
+	/*	try {
 			Thread.sleep(this.coldDrinkDelay);
 			logger.info(Thread.currentThread().getName()
 					+ " prepared cold drink #" + coldDrinkCounter.incrementAndGet() + " for order #"
@@ -73,7 +72,8 @@ public class Barista {
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 			return null;
-		}
+		}*/
+		return null;
 	}
 
 }

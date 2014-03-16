@@ -54,10 +54,11 @@ public class CafeDemoActiveMQBackedChannels {
 	public static void main(String[] args) throws InterruptedException, IOException {
 		AbstractApplicationContext context = new ClassPathXmlApplicationContext(
 				"/META-INF/spring/integration/activemq/cafeDemo-amq-config.xml",
+				"/META-INF/spring/integration/activemq/common-jms.xml",
 				"/META-INF/spring/integration/activemq/cafeDemo-amq-jms-backed.xml");
 
 		// comment this out to run the sample without placing any new orders on the queue
-		order(context, 25);
+		order(context, 1);
 
 		System.in.read();
 		context.close();
