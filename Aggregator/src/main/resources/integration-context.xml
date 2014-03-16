@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+	xmlns:int-file="http://www.springframework.org/schema/integration/file"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+		http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	
+	<int-jms:inbound-channel-adapter id="jmsIn" destination="setup-complete" channel="input">
+    	<int:poller fixed-rate="30"/>
+	</int-jms:inbound-channel-adapter>
+	
+	<int:channel id="input">
+		<int:interceptors>
+    	  <int:wire-tap channel="logger"/>
+   		 </int:interceptors>
+	</int:channel>
+	
+	
+	<int:channel id="output"/>
+
+
+	<bean id="mongoDbFactory" class="org.springframework.data.mongodb.core.SimpleMongoDbFactory">
+    <constructor-arg>
+        <bean class="com.mongodb.Mongo"/>
+    </constructor-arg>
+    <constructor-arg value="test"/>
+</bean>
+	
+	<bean id="mongoDbMessageStore" class="org.springframework.integration.mongodb.store.MongoDbMessageStore">
+    	<constructor-arg ref="mongoDbFactory"/>
+	</bean>
+
+	<int:aggregator id="appAggregator"
+               input-channel="input"
+               output-channel="output"
+               ref="applicationSetupAggregator"
+               method="aggregate"
+               message-store="mongoDbMessageStore"
+                />
+
+ 	<int-jms:outbound-channel-adapter id="jmsOut" destination="done" channel="output"/>
+ 	
+ 	
+	<int:logging-channel-adapter log-full-message="true" id="logger" level="INFO"/>
+ 	
+</beans>
