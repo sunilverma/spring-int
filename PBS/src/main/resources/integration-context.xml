@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+	xmlns:int-file="http://www.springframework.org/schema/integration/file"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+		http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	
+	<int-jms:inbound-channel-adapter id="jmsIn" destination="pbs" channel="input">
+    	<int:poller fixed-rate="30"/>
+	</int-jms:inbound-channel-adapter>
+
+	
+
+	<int:service-activator input-channel="input" ref="sampleEndpoint" output-channel="output"/>
+	<int:channel id="input">
+		<int:interceptors>
+    	  <int:wire-tap channel="logger"/>
+   		 </int:interceptors>
+	</int:channel>
+	<int:logging-channel-adapter log-full-message="true" id="logger" level="INFO"/>
+
+	<int:channel id="output">
+		<int:interceptors>
+    	  <int:wire-tap channel="logger"/>
+   		 </int:interceptors>
+	</int:channel>
+
+<!-- 	<int-file:outbound-channel-adapter channel="output" directory="target/output"/>
+ -->
+ 	<int-jms:outbound-channel-adapter id="jmsOut" destination="setup-complete" channel="output" extract-payload="false"/>
+</beans>
